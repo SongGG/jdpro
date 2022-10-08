@@ -85,6 +85,7 @@ let QYWX_KEY = '';
 - 图文消息（mpnews）: 素材库图片id, 可查看此教程(http://note.youdao.com/s/HMiudGkb)或者(https://note.youdao.com/ynoteshare1/index.html?id=1a0c8aff284ad28cbd011b29b3ad0191&type=note)
  */
 let QYWX_AM = '';
+let QYWX_PROXY_HOST = 'https://qyapi.weixin.qq.com';
 
 // =======================================飞书机器人通知设置区域===========================================
 //此处填你飞书机器人的 webhook(详见文档 https://open.feishu.cn/document/ukTMukTMukTM/ucTM5YjL3ETO24yNxkjN)
@@ -681,6 +682,9 @@ async function sendNotify(text, desp, params = {}, author = "\n=================
 
 		if (process.env["QYWX_KEY" + UseGroupNotify] && Use_qywxBotNotify) {
 		    QYWX_KEY = process.env["QYWX_KEY" + UseGroupNotify];
+		}
+	    	if (process.env["QYWX_PROXY_HOST" + UseGroupNotify] && Use_qywxBotNotify) {
+		    QYWX_PROXY_HOST = process.env["QYWX_PROXY_HOST" + UseGroupNotify];
 		}
         
 		if (process.env["QYWX_AM" + UseGroupNotify] && Use_qywxamNotify) {
@@ -1485,7 +1489,7 @@ function ddBotNotify(text, desp) {
 function qywxBotNotify(text, desp) {
     return new Promise((resolve) => {
         const options = {
-            url: `https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=${QYWX_KEY}`,
+            url: `${QYWX_PROXY_HOST}/cgi-bin/webhook/send?key=${QYWX_KEY}`,
             json: {
                 msgtype: 'text',
                 text: {
@@ -1603,7 +1607,7 @@ function qywxamNotify(text, desp, strsummary = "") {
         if (QYWX_AM) {
             const QYWX_AM_AY = QYWX_AM.split(',');
             const options_accesstoken = {
-                url: `https://qyapi.weixin.qq.com/cgi-bin/gettoken`,
+                url: `${QYWX_PROXY_HOST}/cgi-bin/gettoken`,
                 json: {
                     corpid: `${QYWX_AM_AY[0]}`,
                     corpsecret: `${QYWX_AM_AY[1]}`,
@@ -1670,7 +1674,7 @@ function qywxamNotify(text, desp, strsummary = "") {
                     };
                 }
                 options = {
-                    url: `https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=${accesstoken}`,
+                    url: `${QYWX_PROXY_HOST}/cgi-bin/message/send?access_token=${accesstoken}`,
                     json: {
                         touser: `${ChangeUserId(desp)}`,
                         agentid: `${QYWX_AM_AY[3]}`,
