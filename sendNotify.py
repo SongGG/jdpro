@@ -34,7 +34,8 @@ DD_BOT_SECRET = ''          # 钉钉机器人的DD_BOT_SECRET; secrets可填
 QQ_SKEY = ''                # qq机器人的QQ_SKEY; secrets可填
 QQ_MODE = ''                # qq机器人的QQ_MODE; secrets可填
 QYWX_AM = ''                # 企业微信
-QYWX_KEY = ''                # 企业微信BOT
+QYWX_PROXY_HOST='https://qyapi.weixin.qq.com'          # 企业应用微信代理地址
+QYWX_KEY = ''               # 企业微信BOT
 PUSH_PLUS_TOKEN = ''        # 微信推送Plus+
 FS_KEY = ''                 #飞书群BOT
 
@@ -69,8 +70,10 @@ if "PUSH_PLUS_TOKEN" in os.environ:
 if "QYWX_AM" in os.environ:
     if len(os.environ["QYWX_AM"]) > 1:
         QYWX_AM = os.environ["QYWX_AM"]
+if "QYWX_PROXY_HOST" in os.environ:
+    if len(os.environ["QYWX_PROXY_HOST"]) > 1:
+        QYWX_PROXY_HOST = os.environ["QYWX_PROXY_HOST"]
         
-
 if "QYWX_KEY" in os.environ:
     if len(os.environ["QYWX_KEY"]) > 1:
         QYWX_KEY = os.environ["QYWX_KEY"]        
@@ -275,8 +278,8 @@ def wecom_key(title, content):
          }
     }
     
-    print(f"https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key={QYWX_KEY}")
-    response = requests.post(f"https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key={QYWX_KEY}", json=data,headers=headers).json()
+    print(f"{QYWX_PROXY_HOST}/cgi-bin/webhook/send?key={QYWX_KEY}")
+    response = requests.post(f"{QYWX_PROXY_HOST}/cgi-bin/webhook/send?key={QYWX_KEY}", json=data,headers=headers).json()
     print(response)
 
 # 飞书机器人推送
@@ -339,7 +342,7 @@ class WeCom:
         self.AGENTID = agentid
 
     def get_access_token(self):
-        url = 'https://qyapi.weixin.qq.com/cgi-bin/gettoken'
+        url = f'{QYWX_PROXY_HOST}/cgi-bin/gettoken'
         values = {'corpid': self.CORPID,
                   'corpsecret': self.CORPSECRET,
                   }
@@ -348,7 +351,7 @@ class WeCom:
         return data["access_token"]
 
     def send_text(self, message, touser="@all"):
-        send_url = 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=' + self.get_access_token()
+        send_url = f'{QYWX_PROXY_HOST}/cgi-bin/message/send?access_token=' + self.get_access_token()
         send_values = {
             "touser": touser,
             "msgtype": "text",
@@ -364,7 +367,7 @@ class WeCom:
         return respone["errmsg"]
 
     def send_mpnews(self, title, message, media_id, touser="@all"):
-        send_url = 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=' + self.get_access_token()
+        send_url = f'{QYWX_PROXY_HOST}/cgi-bin/message/send?access_token=' + self.get_access_token()
         send_values = {
             "touser": touser,
             "msgtype": "mpnews",
