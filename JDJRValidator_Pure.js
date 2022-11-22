@@ -221,10 +221,12 @@ class JDJRValidator {
     this.data = {};
     this.x = 0;
     this.t = Date.now();
+    this.trynum = 0;
   }
 
   async run(scene) {
     try {
+      if (this.trynum > 5) return '';
       const tryRecognize = async () => {
         const x = await this.recognize(scene);
 
@@ -250,6 +252,7 @@ class JDJRValidator {
         return result;
       } else {
         console.count("验证失败");
+        this.trynum++
         // console.count(JSON.stringify(result));
         await sleep(300);
         return await this.run(scene);
@@ -522,11 +525,11 @@ function injectToRequest2(fn, scene = 'cww') {
           console.error('验证请求失败.');
           return;
         }
-        if (data.search('验证') > -1) {
+         if (data.search('验证') > -1) {
           console.log('JDJR验证中......');
           const res = await new JDJRValidator().run(scene);
           if (res) {
-            opts.url += `&validate=${res.validate}`;
+             opts.url += `&validate=${res.validate}`;
           }
           fn(opts, cb);
         } else {
@@ -542,7 +545,8 @@ function injectToRequest2(fn, scene = 'cww') {
 async function injectToRequest(scene = 'cww') {
   console.log('JDJR验证中......');
   const res = await new JDJRValidator().run(scene);
-  return `&validate=${res.validate}`
+  if (res == '') return;
+  return res.validate;
 }
 
 module.exports = {

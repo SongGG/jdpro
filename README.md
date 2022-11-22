@@ -28,10 +28,12 @@ curl -sSL https://js.dayplus.xyz/https://raw.githubusercontent.com/6dylan6/jdpro
 国内机用下面指令（带代理）：
 
 ```
-ql repo https://js.dayplus.xyz/https://github.com/6dylan6/jdpro.git "jd_|jx_|jddj_" "backUp" "^jd[^_]|USER|JD|function|sendNotify"
+ql repo https://ghproxy.com/https://github.com/6dylan6/jdpro.git "jd_|jx_|jddj_" "backUp" "^jd[^_]|USER|JD|function|sendNotify"
 
 ```
-国外机用下面指令：
+如默认代理ghproxy.com 拉不动，换备用的 js.dayplus.xyz
+
+国外机用下面指令（无需代理）：
 
 ```
 ql repo https://github.com/6dylan6/jdpro.git "jd_|jx_|jddj_" "backUp" "^jd[^_]|USER|JD|function|sendNotify"
@@ -59,7 +61,7 @@ RepoFileExtensions="js py"修改为 RepoFileExtensions="js py sh ts" 保存
 
 3、新建拉库任务，并执行，刷新浏览器即可看到添加的任务。
 
-4、添加CK环境变量
+4、添加CK环境变量，多CK不要写在一起，每个都新建JD_COOKIE变量；
 
 
 
@@ -111,15 +113,29 @@ export NOTIFY_SHOWNAMETYPE="4"    效果是 :  账号名称：备注
 </code></pre>
 </details>
 
-## 加密脚本清单
+## 加密脚本说明
 
 <details>
-<summary>加密脚本清单，不放心可禁用</summary>
+<summary>加密脚本，不放心可禁用</summary>
 <pre><code>
 加密的会在任务后添加加密标识
 开卡系列都加密 
 </code></pre>
 </details>
+
+## 互助模式使用说明
+
+集成互助研究院taskbefore,code模块，可实现临时禁止某些CK参加所有活动或某些活动功能，实现重组CK顺序功能，包括随机、优先、轮换、组队、分段等功能
+
+常用变量举例：
+
+Recombin_CK_Mode="1"  全部顺序随机
+
+Recombin_CK_Mode="2" Recombin_CK_ARG1="15" 假设有100个CK，前15个CK按正常顺序靠前，其余CK随机乱序
+
+Recombin_CK_Mode="3" Recombin_CK_ARG1="5" Recombin_CK_ARG2="5"  假设有100个CK，希望前5个账号始终保持在前部，剩余95个账号按照轮换模式每天轮换5个
+
+其他用法具体参考[文档](https://docs.qq.com/doc/DTXh6QUVjRXJ1TFdN)
 
 
 ## 部分脚本环境变量
@@ -137,9 +153,7 @@ export NOTIFY_SHOWNAMETYPE="4"    效果是 :  账号名称：备注
 |       `JD_UNSUB`             |      批量取消商品与店铺关注开关      | 非必须 | 控制jd_unsubscribe.js运行，默认为true取关，false不取关 |
 |       `JD_CART_REMOVE`       |      清空购物车      | 非必须 | 控制jd_clean_car.js运行 ，默认false不清空，true清空 |
 |   `WSKEY_DISCHECK`           |     wskey转换     | 非必须 | 默认为false检查，设置true为不检查直接转换 |
-|   ` HelpType`           |     互助模式    | 非必须 | 默认顺序助力，0是全部一样顺序助力，1是均等机会助力，2是随机顺序助力，例： export HelpType=1 |
-|   `DY_DY_ZJDTOP`           |     赚京豆     | 非必须 |开团数量默认3，设置DY_ZJDTOP=10可修改开团数量 |
-
+|   `DPSTOKEN`           |     店铺签到     | 非必须 | 多个&隔开 |
 
 
 
